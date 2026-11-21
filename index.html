@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FelixCad — Simple 3D</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">F</span><span>FelixCad</span><span class="beta">early access</span></div>
+    <div class="project-name">Untitled design <span class="version-badge">v0.0.15</span> <span class="saved-dot"></span></div>
+    <div class="top-actions"><button class="quiet" id="undoBtn" title="Undo (⌘Z)">↶</button><button class="quiet" id="redoBtn" title="Redo (⌘⇧Z)">↷</button><button class="export-button" id="exportBtn">Export for printing <span>↓</span></button></div>
+  </header>
+  <main class="layout">
+    <aside class="left-panel">
+      <div class="panel-heading">BUILD</div>
+      <button class="tool-card active" data-create="box"><span class="tool-icon">▰</span><span><b>Box</b><small>Start with a block</small></span><kbd>B</kbd></button>
+      <button class="tool-card" data-create="cylinder"><span class="tool-icon cylinder-icon">◉</span><span><b>Cylinder</b><small>Round parts and holes</small></span><kbd>C</kbd></button>
+      <div class="panel-separator"></div>
+      <div class="section-title">YOUR DESIGN <button id="addBox" class="plus">+</button></div>
+      <div id="objectList" class="object-list"></div>
+      <div class="left-bottom"><span class="status-light"></span> All changes saved</div>
+    </aside>
+    <section class="workarea">
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="scene"></canvas>
+        <div class="canvas-tools"><button id="fitBtn" title="Fit model to view">⌗ <span>Fit</span></button><button id="homeBtn" title="Reset view">◇ <span>Home</span></button></div>
+        <div class="view-label"><span class="green-dot"></span><span id="viewMode">3D VIEW</span><span class="view-sep">·</span> Millimeters</div>
+        <div id="sketchBar" class="mode-bar hidden"><span class="mode-step">1</span><b>Plane</b><button data-plane="XY" class="mode-tool active">XY · Top</button><button data-plane="XZ" class="mode-tool">XZ · Front</button><button data-plane="YZ" class="mode-tool">YZ · Side</button><button class="mode-tool active">▱ <span>Rectangle</span></button><span class="mode-instruction">Click and drag to draw a profile</span><button id="cancelSketch" class="mode-secondary">Cancel</button><button id="finishSketch" class="mode-primary">Finish sketch <span>→</span></button></div>
+        <div id="extrudeBar" class="mode-bar hidden"><span class="mode-step">2</span><b>Extrude</b><label class="distance-input">Distance <input id="extrudeDepth" type="number" min="-500" max="500" value="20"><span>mm</span></label><span id="extrudeResult" class="mode-instruction">Drag the arrow; overlaps cut automatically</span><button id="applyExtrude" class="mode-primary">Apply</button><button id="editSketch" class="mode-secondary">Edit sketch</button><button id="cancelExtrude" class="mode-secondary">Cancel</button></div>
+        <div class="empty-hint" id="emptyHint"><div class="hint-icon">▱</div><b>Your first idea starts here</b><span>Add a shape, or double-click the plane to start a sketch.</span><button id="startBox">Add a box</button></div>
+        <div class="toast" id="toast"></div>
+      </div>
+      <div class="bottom-hint"><span>Trackpad: pinch to zoom · two-finger scroll to pan</span><span>Select a box for Move/Resize arrows · drag extrusion arrow to add or cut</span></div>
+    </section>
+    <aside class="right-panel">
+      <div class="inspector-header"><div><div class="panel-heading">INSPECTOR</div><h2 id="inspectorTitle">Nothing selected</h2></div><span class="cube-mini">◇</span></div>
+      <div id="inspectorEmpty" class="inspector-empty"><span class="select-icon">↖</span><b>Select a shape to edit it</b><p>Click any object in your design to change its exact size.</p></div>
+      <div id="inspector" class="inspector hidden">
+        <div class="field-group"><label>Shape</label><div class="shape-readout" id="shapeReadout">Box</div></div>
+        <div class="gizmo-switch"><button id="moveMode" class="active">↔ Move</button><button id="sizeMode">⤢ Resize</button></div><p class="gizmo-help">Drag a colored arrow to move on that axis. Resize mode changes the box dimensions.</p>
+        <div class="field-group"><label>Position <span>mm</span></label><div class="field-row"><label class="axis">X</label><input id="posX" type="number" step="1"><label class="axis">Y</label><input id="posY" type="number" step="1"></div><div class="field-row z-position"><label class="axis">Z</label><input id="posZ" type="number" step="1"></div></div>
+        <div class="field-group"><label>Size <span>mm</span></label><div class="dimension-field"><span id="dimLabel1">Width</span><div><input id="dim1" type="number" min="1" step="1"><span>mm</span></div></div><div class="dimension-field"><span id="dimLabel2">Depth</span><div><input id="dim2" type="number" min="1" step="1"><span>mm</span></div></div><div class="dimension-field"><span id="dimLabel3">Height</span><div><input id="dim3" type="number" min="1" step="1"><span>mm</span></div></div></div>
+        <button class="delete-button" id="deleteBtn">⌫ <span>Delete shape</span></button>
+      </div>
+      <div class="copilot">
+        <div class="copilot-title"><span class="sparkle">✳</span><b>AI copilot</b><span class="soon">COMING SOON</span></div>
+        <p>Your design buddy will be right here. Ask for ideas, or get help changing a shape.</p>
+        <div class="chat-input"><span>Ask anything…</span><button disabled>↑</button></div>
+      </div>
+      <div class="print-note"><span>▧</span><div><b>Made for 3D printing</b><p>Export an STL, then open it in Bambu Studio to slice and print.</p></div></div>
+    </aside>
+  </main>
+  <div id="exportModal" class="modal-backdrop hidden"><div class="modal"><button id="closeModal" class="modal-close">×</button><div class="modal-icon">↓</div><h2>Ready for Bambu Studio</h2><p>Your design will be exported as an STL file in millimeters. Open it in Bambu Studio to orient, slice, and print.</p><button id="downloadStl" class="export-button modal-export">Download STL <span>↓</span></button><small>STL carries the shape. Your editable design stays in this browser prototype.</small></div></div>
+  <script src="app.js"></script>
+</body>
+</html>
