@@ -9,7 +9,7 @@
 <body>
   <header class="topbar">
     <div class="brand"><span class="brand-mark">F</span><span>FelixCad</span><span class="beta">early access</span></div>
-    <div class="project-name">Untitled design <span class="version-badge">v0.0.15</span> <span class="saved-dot"></span></div>
+    <div class="project-name">Untitled design <span class="version-badge">v0.0.16</span> <span class="saved-dot"></span></div>
     <div class="top-actions"><button class="quiet" id="undoBtn" title="Undo (⌘Z)">↶</button><button class="quiet" id="redoBtn" title="Redo (⌘⇧Z)">↷</button><button class="export-button" id="exportBtn">Export for printing <span>↓</span></button></div>
   </header>
   <main class="layout">
@@ -45,9 +45,12 @@
         <button class="delete-button" id="deleteBtn">⌫ <span>Delete shape</span></button>
       </div>
       <div class="copilot">
-        <div class="copilot-title"><span class="sparkle">✳</span><b>AI copilot</b><span class="soon">COMING SOON</span></div>
-        <p>Your design buddy will be right here. Ask for ideas, or get help changing a shape.</p>
-        <div class="chat-input"><span>Ask anything…</span><button disabled>↑</button></div>
+        <div class="copilot-title"><span class="sparkle">✳</span><b>AI copilot</b><span id="modelStatus" class="model-status">Checking…</span></div>
+        <label class="model-picker-label" for="modelPicker">LOCAL MODEL</label>
+        <select id="modelPicker" class="model-picker" aria-label="Local AI model"><option value="qwen3.5:4b">qwen3.5:4b</option></select>
+        <div id="chatMessages" class="chat-messages" aria-live="polite"><div class="chat-message assistant">I’m your local design copilot. Ask me about your design or how to build something.</div></div>
+        <form id="chatForm" class="chat-form"><textarea id="chatInput" rows="2" placeholder="Ask about your design…" aria-label="Message the AI copilot"></textarea><button id="chatSend" type="submit" title="Send message">↑</button></form>
+        <button id="clearChat" class="clear-chat" type="button">Clear conversation</button>
       </div>
       <div class="print-note"><span>▧</span><div><b>Made for 3D printing</b><p>Export an STL, then open it in Bambu Studio to slice and print.</p></div></div>
     </aside>

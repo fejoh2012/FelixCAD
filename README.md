@@ -1,16 +1,27 @@
 # FelixCad prototype
 
-A beginner-friendly browser CAD prototype for sketching rectangular profiles, extruding or cutting them, and exporting STL files for 3D printing.
+A beginner-friendly browser CAD prototype for sketching rectangular profiles, extruding or cutting them, and exporting STL files for 3D printing. The AI copilot uses a local Ollama model; prompts and design context are sent to the Ollama service on this computer, not to a hosted AI API.
 
 ## Run locally
 
-Requires Node.js. From this folder, run:
+Requires Node.js and [Ollama](https://ollama.com/download).
 
-```sh
-node server.js
-```
+1. Install and start Ollama.
+2. In Terminal, download and start the recommended small model:
 
-Then open [http://localhost:4174](http://localhost:4174).
+   ```sh
+   ollama run qwen3.5:4b
+   ```
+
+   Wait for Ollama to finish downloading it. You can then quit the model prompt; the Ollama service stays running.
+3. From this folder, start FelixCad:
+
+   ```sh
+   node server.js
+   ```
+4. Open [http://localhost:4174](http://localhost:4174). The copilot shows **LOCAL · READY** when it can see Ollama and an installed model.
+
+The sidebar model menu lists the models already installed in Ollama. If the copilot says **OLLAMA OFFLINE**, make sure Ollama is running. If it says **MODEL NEEDED**, run the model command above. The GitHub Pages website is a static demo; local inference is available when running FelixCad on your computer with this local server.
 
 ## Try it
 
@@ -22,4 +33,4 @@ Then open [http://localhost:4174](http://localhost:4174).
 - Export an STL in millimeters for Bambu Studio.
 - Designs are saved in this browser's local storage.
 
-This is an early interaction prototype. Sketching supports rectangular profiles. Box cuts use a rectangular solid mesh, while cylinder cuts use a fine mesh approximation. `.blend` / `.fbx` export and the AI copilot are not implemented.
+This is an early interaction prototype. Sketching supports rectangular profiles. Box cuts use a rectangular solid mesh, while cylinder cuts use a fine mesh approximation. `.blend` / `.fbx` export are not implemented.
